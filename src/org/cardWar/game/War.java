@@ -1,16 +1,17 @@
 package org.cardWar.game;
 
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.TreeMultimap;
-
-
-import java.util.*;
-
-import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import com.google.common.collect.Ordering;
+import com.google.common.collect.TreeMultimap;
 
 public class War {
 
@@ -66,12 +67,13 @@ public class War {
 	            pile.setWinner(rankingPlayers.get(0));
 	        }
 	        List<Player> checkPlayers = new ArrayList<>(players);
+	        //filter players having handCards empty to remove from the battle
 	        checkPlayers.stream()
 	                .filter(player -> !player.hasHandCards())
 	                .forEach(players::remove);
 	    }
 
-	    @VisibleForTesting
+	    
 	    List<Player> determineWinnerOfBattle(Map<Player, Optional<Card>> playedCards) {
 	        TreeMultimap<Integer, Player> rankingTree = TreeMultimap.create(Ordering.natural().reverse(), Ordering.usingToString());
 
@@ -87,7 +89,7 @@ public class War {
 	        return highestRank.isPresent() ? rankingTree.get(highestRank.get()).stream().collect(toList()) : Collections.<Player>emptyList();
 	    }
 
-	    @VisibleForTesting
+	    
 	    List<Player> determineWinnerOfGame(List<Player> players) {
 	        TreeMultimap<Integer, Player> rankingTree = TreeMultimap.create(Ordering.natural().reverse(), Ordering.usingToString());
 
